@@ -32,10 +32,10 @@
     "extra": {
       "laravel": {
         "providers": [
-          "DenizTezcan\\BolRetailerV3\\BolServiceProvider"
+          "DenizTezcan\\LiqPay\\LiqPayServiceProvider"
         ],
         "aliases": {
-          "BolRetailerV3": "DenizTezcan\\BolRetailerV3\\Facades\\BolRetailerV3"
+          "LiqPay": "DenizTezcan\\LiqPay\\Facades\\LiqPay"
         }
       }
     }
