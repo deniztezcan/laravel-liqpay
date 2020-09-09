@@ -21,6 +21,8 @@
  *
  */
 
+namespace DenizTezcan\LiqPay\Support;
+
 /**
  * Payment method liqpay process
  *
