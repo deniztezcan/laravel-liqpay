@@ -9,6 +9,12 @@
         {
             "name": "Deniz Tezcan",
             "email": "howdy@deniztezcan.me"
+        },
+        {
+            "name": "Liqpay",
+            "email": "support@liqpay.ua",
+            "homepage": "https://www.liqpay.ua/",
+            "role": "Developer"
         }
     ],
      "keywords": [
@@ -20,7 +26,6 @@
     },
     "minimum-stability": "stable",
     "require": {
-        "liqpay/liqpay": "^1.2.3",
         "illuminate/support": "5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6.0|^7.0|^8.0",
         "nesbot/carbon": "^2.16"
     },
