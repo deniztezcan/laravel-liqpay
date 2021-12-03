@@ -59,11 +59,11 @@ class LiqPay
         string $private_key,
         string|NULL $api_url = null
     ) {
-        if (empty($public_key)) {
+        if (null !== $public_key) {
             throw new InvalidArgumentException('public_key is empty');
         }
 
-        if (empty($private_key)) {
+        if (null !== $private_key) {
             throw new InvalidArgumentException('private_key is empty');
         }
 
@@ -122,7 +122,8 @@ class LiqPay
      *
      * @return string|null
      */
-    public function get_response_code(): string|null {
+    public function get_response_code(): string|null
+    {
         return $this->_server_response_code;
     }
 
@@ -138,7 +139,7 @@ class LiqPay
     public function cnb_form(array $params): string
     {
         $language = 'ru';
-        if (isset($params['language']) && $params['language'] == 'en') {
+        if (isset($params['language']) && $params['language'] === 'en') {
             $language = 'en';
         }
 
@@ -219,7 +220,7 @@ class LiqPay
         if (!in_array($params['currency'], $this->_supportedCurrencies)) {
             throw new InvalidArgumentException('currency is not supported');
         }
-        if ($params['currency'] == self::CURRENCY_RUR) {
+        if ($params['currency'] === self::CURRENCY_RUR) {
             $params['currency'] = self::CURRENCY_RUB;
         }
         if (!isset($params['description'])) {

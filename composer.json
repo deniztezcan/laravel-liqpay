@@ -38,9 +38,5 @@
           "LiqPay": "DenizTezcan\\LiqPay\\Facades\\LiqPay"
         }
       }
-    },
-    "require-dev": {
-        "rector/rector": "^0.12.5",
-        "phpstan/phpstan": "^1.2"
     }
 }
