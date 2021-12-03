@@ -1,5 +1,8 @@
 <?php
 
+ 
+namespace DenizTezcan\LiqPay\Support;
+
 /**
  * Liqpay Payment Module
  *
