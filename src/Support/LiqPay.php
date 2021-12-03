@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Liqpay Payment Module
  *
@@ -21,8 +22,6 @@
  *
  */
 
-namespace DenizTezcan\LiqPay\Support;
-
 /**
  * Payment method liqpay process
  *
@@ -36,30 +35,30 @@ class LiqPay
     const CURRENCY_RUB = 'RUB';
     const CURRENCY_RUR = 'RUR';
 
-    private $_api_url = 'https://www.liqpay.ua/api/';
-    private $_checkout_url = 'https://www.liqpay.ua/api/3/checkout';
-    protected $_supportedCurrencies = array(
-        self::CURRENCY_EUR,
-        self::CURRENCY_USD,
-        self::CURRENCY_UAH,
-        self::CURRENCY_RUB,
-        self::CURRENCY_RUR,
-    );
-    private $_public_key;
-    private $_private_key;
-    private $_server_response_code = null;
-
     /**
      * Constructor.
      *
      * @param string $public_key
      * @param string $private_key
-     * @param string $api_url (optional)
+     * @param string|null $api_url (optional)
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($public_key, $private_key, $api_url = null)
-    {
+    public function __construct(
+        string $_api_url = 'https://www.liqpay.ua/ru/checkout/card/sandbox_i35444360364',
+        string $_checkout_url = 'https://www.liqpay.ua/api/3/checkout',
+        string|NULL $_server_response_code = null,
+        string $_supportedCurrencies = array(
+            self::CURRENCY_EUR,
+            self::CURRENCY_USD,
+            self::CURRENCY_UAH,
+            self::CURRENCY_RUB,
+            self::CURRENCY_RUR,
+        ),
+        string $public_key,
+        string $private_key,
+        string|NULL $api_url = null
+    ) {
         if (empty($public_key)) {
             throw new InvalidArgumentException('public_key is empty');
         }
@@ -70,7 +69,7 @@ class LiqPay
 
         $this->_public_key = $public_key;
         $this->_private_key = $private_key;
-        
+
         if (null !== $api_url) {
             $this->_api_url = $api_url;
         }
@@ -85,8 +84,11 @@ class LiqPay
      *
      * @return stdClass
      */
-    public function api($path, $params = array(), $timeout = 5)
-    {
+    public function api(
+        string $path,
+        array $params = array(),
+        int $timeout = 5
+    ): stdClass {
         if (!isset($params['version'])) {
             throw new InvalidArgumentException('version is null');
         }
@@ -94,17 +96,17 @@ class LiqPay
         $public_key  = $this->_public_key;
         $private_key = $this->_private_key;
         $data        = $this->encode_params(array_merge(compact('public_key'), $params));
-        $signature   = $this->str_to_sign($private_key.$data.$private_key);
+        $signature   = $this->str_to_sign($private_key . $data . $private_key);
         $postfields  = http_build_query(array(
-           'data'  => $data,
-           'signature' => $signature
+            'data'  => $data,
+            'signature' => $signature
         ));
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // Avoid MITM vulnerability http://phpsecurity.readthedocs.io/en/latest/Input-Validation.html#validation-of-input-sources
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);    // Check the existence of a common name and also verify that it matches the hostname provided
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT ,$timeout);   // The number of seconds to wait while trying to connect
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);   // The number of seconds to wait while trying to connect
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);          // The maximum number of seconds to allow cURL functions to execute
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
@@ -120,8 +122,7 @@ class LiqPay
      *
      * @return string|null
      */
-    public function get_response_code()
-    {
+    public function get_response_code(): string|null {
         return $this->_server_response_code;
     }
 
@@ -134,7 +135,7 @@ class LiqPay
      *
      * @throws InvalidArgumentException
      */
-    public function cnb_form($params)
+    public function cnb_form(array $params): string
     {
         $language = 'ru';
         if (isset($params['language']) && $params['language'] == 'en') {
@@ -144,8 +145,9 @@ class LiqPay
         $params    = $this->cnb_params($params);
         $data      = $this->encode_params($params);
         $signature = $this->cnb_signature($params);
-        
-        return sprintf('
+
+        return sprintf(
+            '
             <form method="POST" action="%s" accept-charset="utf-8">
                 %s
                 %s
@@ -158,17 +160,17 @@ class LiqPay
             $language
         );
     }
-    
+
     /**
      * cnb_form raw data for custom form
      *
      * @param $params
      * @return array
      */
-    public function cnb_form_raw($params)
+    public function cnb_form_raw($params): array
     {
         $params = $this->cnb_params($params);
-        
+
         return array(
             'url'       => $this->_checkout_url,
             'data'      => $this->encode_params($params),
@@ -183,7 +185,7 @@ class LiqPay
      *
      * @return string
      */
-    public function cnb_signature($params)
+    public function cnb_signature(array $params): string
     {
         $params      = $this->cnb_params($params);
         $private_key = $this->_private_key;
@@ -201,7 +203,7 @@ class LiqPay
      *
      * @return array $params
      */
-    private function cnb_params($params)
+    private function cnb_params(array $params): array
     {
         $params['public_key'] = $this->_public_key;
 
@@ -233,7 +235,7 @@ class LiqPay
      * @param array $params
      * @return string
      */
-    private function encode_params($params)
+    private function encode_params(array $params): string
     {
         return base64_encode(json_encode($params));
     }
@@ -244,7 +246,7 @@ class LiqPay
      * @param string $params
      * @return array
      */
-    public function decode_params($params)
+    public function decode_params(string $params): array
     {
         return json_decode(base64_decode($params), true);
     }
@@ -256,7 +258,7 @@ class LiqPay
      *
      * @return string
      */
-    public function str_to_sign($str)
+    public function str_to_sign(string $str): string
     {
         $signature = base64_encode(sha1($str, 1));
 
