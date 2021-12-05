@@ -48,7 +48,6 @@ class LiqPay
      * @throws InvalidArgumentException
      */
     public function __construct(
-        string $_api_url = 'https://www.liqpay.ua/ru/checkout/card/sandbox_i35444360364',
         string $_checkout_url = 'https://www.liqpay.ua/api/3/checkout',
         string|NULL $_server_response_code = null,
         string $_supportedCurrencies = array(
@@ -58,9 +57,9 @@ class LiqPay
             self::CURRENCY_RUB,
             self::CURRENCY_RUR,
         ),
-        string $public_key,
-        string $private_key,
-        string|NULL $api_url = null
+        string $public_key = 'sandbox_i35444360364',
+        string $private_key = 'sandbox_oes9JoLcbl3oCgpafe8xfQW5sHpifiR34KDKWHhF',
+        string|NULL $api_url = 'https://www.liqpay.ua/ru/checkout/card/sandbox_i35444360364'
     ) {
         if (null !== $public_key) {
             throw new InvalidArgumentException('public_key is empty');
@@ -85,13 +84,13 @@ class LiqPay
      * @param array $params
      * @param int $timeout
      *
-     * @return stdClass
+     * @return string
      */
     public function api(
         string $path,
         array $params = array(),
-        int $timeout = 5
-    ): stdClass {
+        int $timeout = 5,
+    ): string {
         if (!isset($params['version'])) {
             throw new InvalidArgumentException('version is null');
         }
