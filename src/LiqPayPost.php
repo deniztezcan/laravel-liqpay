@@ -16,24 +16,40 @@ use DenizTezcan\LiqPay\Support\LiqPay as AbstractLiqPay;
 // include('../config/liqpay.php');
 class LiqPayPost
 {
-
-    public function __construct()
-    {
-        // $this->client = new AbstractLiqPay('sandbox_i35444360364', 'sandbox_oes9JoLcbl3oCgpafe8xfQW5sHpifiR34KDKWHhF');
-    }
-
-    public function pay(
+    public function __construct(
         float $amount = 1.00,
         string $currency = 'UAH',
         string $description = 'foo',
         string $order_id = "bar",
-        string $result_url = "https://www.liqpay.ua/ru/checkout/card/sandbox_i35444360364",
+        string $result_url = "https://www.liqpay.ua/ru/checkout/card/",
         string $server_url = "",
         string $public_key = "",
         string $private_key = "",
-    ): string {
+        ) 
+    { 
+        $this->amount = $amount;
+        $this->currency = $currency;
+        $this->description = $description;
+        $this->order_id = $order_id;
+        $this->result_url = $result_url.$public_key;
+        $this->server_url = $server_url;
+        $this->public_key = $public_key;
+        $this->private_key = $private_key;
+    }
+
+    public function pay(
+        float $amount = 1.00,
+        string $currency = 'USD',
+        string $description = 'foo',
+        string $order_id = "bar",
+        string $result_url = "https://www.liqpay.ua/ru/checkout/card/",
+        string $server_url = "",
+        string $public_key = "",
+        string $private_key = "",
+    ): void 
+    {
         $client = new Client([
-            'base_uri' => 'http://localhost:8000/', //$_checkout_url = 'https://www.liqpay.ua/api/3/checkout',
+            'base_uri' => 'http://localhost:8000/', 
             'form_params' => [
                 'action' => 'pay',
                 'amount' => $amount,
@@ -48,7 +64,6 @@ class LiqPayPost
 
         ]);
 
-        // send data with post method to the result url 
         $request = $client->post('https://www.liqpay.ua/api/3/checkout', [
             'form_params' => [
                 'action' => 'pay',
@@ -76,28 +91,10 @@ class LiqPayPost
                     'server_url' => $server_url,
                 ],
             ],
-        ); // answer from url
+        ); 
 
-
-        // $liqPayClient = new AbstractLiqPay('https://www.liqpay.ua/api/3/checkout', null, $data, $public_key, $private_key);
-        $form = file_get_contents('form/index.html');
-
-        // dd($liqPayClient);
-        $script = '<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script><script type="text/javascript">jQuery(document).ready(function($) {$("form").submit();});</script> ';
-        
-        $form = file_get_contents('form/index.html');$html = $form . $script;
-        return $html;
-    }
-
-    public function status(string $order_id = "bar"): string|false
-    {
-        $data = $this->client->api("request", array(
-            'action' => 'status',
-            'version' => '3',
-            'order_id' => $order_id
-        ));
-
-        return json_encode($data, TRUE);
+        $liqPayClient = new AbstractLiqPay($result_url, null, $data, $public_key, $private_key);
+        header('Location:'.$liqPayClient->_api_url);
     }
 
     public function formData(array $params): string
@@ -107,9 +104,9 @@ class LiqPayPost
             $language = 'en';
         }
 
-        $params    = $this->validateParams($params); //if all params exists
-        $data      = $this->getData($params); // make string from array && UTF-8
-        // $signature = $this->createSignature($params); I think we don't need it
+        $params    = $this->validateParams($params); 
+        $data      = $this->dataToString($params); 
+
         return $data;
     }
 
@@ -122,53 +119,35 @@ class LiqPayPost
             'RUB',
             'RUR',
         ];
-
-        // ($params['version'] !== null) ?? throw new InvalidArgumentException('version is null');
-        // ($params['amount'] !== null) ?? throw new InvalidArgumentException('payment amount not specified');
-        // (($params['currency'] !== null) && in_array($params['currency'], $suppotedCurrencyArray)) ?? throw new InvalidArgumentException('unsupported currency');
-        // ($params['currency'] === 'RUR') ?? $params['currency'] = 'RUB';
-        // ($params['description'] !== null) ?? throw new InvalidArgumentException('description is empty');
-        // ($params['result_url'] !== null) ?? throw new InvalidArgumentException('result_url not specified');
-        // ($params['server_url'] !== null) ?? throw new InvalidArgumentException('server_url not specified');
-        // ($params['order_id'] !== null) ?? throw new InvalidArgumentException('order_id not specified');
-
-        ($params['version'] !== null) ?? die('version is null');
-        ($params['amount'] !== null) ?? die('payment amount not specified');
-        (($params['currency'] !== null) && in_array($params['currency'], $suppotedCurrencyArray)) ?? die('unsupported currency');
-        ($params['currency'] === 'RUR') ?? $params['currency'] = 'RUB';
-        ($params['description'] !== null) ?? die('description is empty');
-        ($params['result_url'] !== null) ?? die('result_url not specified');
-        ($params['server_url'] !== null) ?? die('server_url not specified');
-        ($params['order_id'] !== null) ?? die('order_id not specified');
+        
+        ($params['form_params']['version'] !== null) ?? die('version is null');
+        ($params['form_params']['amount'] !== null) ?? die('payment amount not specified');
+        (($params['form_params']['currency'] !== null) && in_array($params['form_params']['currency'], $suppotedCurrencyArray)) ?? die('unsupported currency');
+        ($params['form_params']['currency'] === 'RUR') ?? $params['form_params']['currency'] = 'RUB';
+        ($params['form_params']['description'] !== null) ?? die('description is empty');
+        ($params['form_params']['result_url'] !== null) ?? die('result_url not specified');
+        ($params['form_params']['server_url'] !== null) ?? die('server_url not specified');
+        ($params['form_params']['order_id'] !== null) ?? die('order_id not specified');
 
         return $params;
     }
 
-    function checkInput($input)
-    {
-        $input = trim($input);
-        $input = stripslashes($input);
-        $input = htmlspecialchars($input);
-        return $input;
-    }
-
-    public function getData(array $params): string
+    public function dataToString(array $params): string
     {
         return base64_encode(json_encode($params));
     }
 
-    // public function createSignature(array $params): array
-    // {
-    //     $params      = $this->validateParams($params);
-    //     $private_key = $this->_private_key;
 
-    //     $json      = $this->encode_params($params);
-    //     $signature = $this->str_to_sign($private_key . $json . $private_key);
+    public function status(string $order_id = "bar"): string|false
+    {
+        $data = $this->client->api("request", array(
+            'action' => 'status',
+            'version' => '3',
+            'order_id' => $order_id
+        ));
 
-    //     base64_encode(sha1($str, 1))
-
-    //     return $signature;
-    // }
+        return json_encode($data, TRUE);
+    }
 }
 $pay = new LiqPayPost();
 $pay->pay();

@@ -57,16 +57,16 @@ class LiqPay
             self::CURRENCY_RUB,
             self::CURRENCY_RUR,
         ),
-        string $public_key = 'sandbox_i35444360364',
-        string $private_key = 'sandbox_oes9JoLcbl3oCgpafe8xfQW5sHpifiR34KDKWHhF',
+        string $public_key = '',
+        string $private_key = '',
         string|NULL $api_url = 'https://www.liqpay.ua/ru/checkout/card/sandbox_i35444360364'
     ) {
-        if (null !== $public_key) {
-            throw new InvalidArgumentException('public_key is empty');
+        if (null === $public_key) {
+            die('public_key is empty');
         }
 
-        if (null !== $private_key) {
-            throw new InvalidArgumentException('private_key is empty');
+        if (null === $private_key) {
+            die('private_key is empty');
         }
 
         $this->_public_key = $public_key;
@@ -138,7 +138,7 @@ class LiqPay
      *
      * @throws InvalidArgumentException
      */
-    public function cnb_form(array $params): string
+    public function cnb_form(string $params): string
     {
         $language = 'ru';
         if (isset($params['language']) && $params['language'] === 'en') {
