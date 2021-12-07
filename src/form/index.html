@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>LiqPay Nopulp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&amp;subset=cyrillic-ext" rel="stylesheet">
+    <link rel="stylesheet" href="//static.liqpay.ua/checkout/211109120553/styles/index.css">
+    <style type="text/css" id="notify-bootstrap">
+        .notifyjs-bootstrap-base {
+            font-weight: bold;
+            padding: 8px 15px 8px 14px;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+            background-color: #fcf8e3;
+            border: 1px solid #fbeed5;
+            -webkit-border-radius: 4px;
+            -moz-border-radius: 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+            padding-left: 25px;
+            background-repeat: no-repeat;
+            background-position: 3px 7px;
+        }
+
+        .notifyjs-bootstrap-error {
+            color: #B94A48;
+            background-color: #F2DEDE;
+            border-color: #EED3D7;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAtRJREFUeNqkVc1u00AQHq+dOD+0poIQfkIjalW0SEGqRMuRnHos3DjwAH0ArlyQeANOOSMeAA5VjyBxKBQhgSpVUKKQNGloFdw4cWw2jtfMOna6JOUArDTazXi/b3dm55socPqQhFka++aHBsI8GsopRJERNFlY88FCEk9Yiwf8RhgRyaHFQpPHCDmZG5oX2ui2yilkcTT1AcDsbYC1NMAyOi7zTX2Agx7A9luAl88BauiiQ/cJaZQfIpAlngDcvZZMrl8vFPK5+XktrWlx3/ehZ5r9+t6e+WVnp1pxnNIjgBe4/6dAysQc8dsmHwPcW9C0h3fW1hans1ltwJhy0GxK7XZbUlMp5Ww2eyan6+ft/f2FAqXGK4CvQk5HueFz7D6GOZtIrK+srupdx1GRBBqNBtzc2AiMr7nPplRdKhb1q6q6zjFhrklEFOUutoQ50xcX86ZlqaZpQrfbBdu2R6/G19zX6XSgh6RX5ubyHCM8nqSID6ICrGiZjGYYxojEsiw4PDwMSL5VKsC8Yf4VRYFzMzMaxwjlJSlCyAQ9l0CW44PBADzXhe7xMdi9HtTrdYjFYkDQL0cn4Xdq2/EAE+InCnvADTf2eah4Sx9vExQjkqXT6aAERICMewd/UAp/IeYANM2joxt+q5VI+ieq2i0Wg3l6DNzHwTERPgo1ko7XBXj3vdlsT2F+UuhIhYkp7u7CarkcrFOCtR3H5JiwbAIeImjT/YQKKBtGjRFCU5IUgFRe7fF4cCNVIPMYo3VKqxwjyNAXNepuopyqnld602qVsfRpEkkz+GFL1wPj6ySXBpJtWVa5xlhpcyhBNwpZHmtX8AGgfIExo0ZpzkWVTBGiXCSEaHh62/PoR0p/vHaczxXGnj4bSo+G78lELU80h1uogBwWLf5YlsPmgDEd4M236xjm+8nm4IuE/9u+/PH2JXZfbwz4zw1WbO+SQPpXfwG/BBgAhCNZiSb/pOQAAAAASUVORK5CYII=);
+        }
+
+        .notifyjs-bootstrap-success {
+            color: #468847;
+            background-color: #DFF0D8;
+            border-color: #D6E9C6;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAutJREFUeNq0lctPE0Ecx38zu/RFS1EryqtgJFA08YCiMZIAQQ4eRG8eDGdPJiYeTIwHTfwPiAcvXIwXLwoXPaDxkWgQ6islKlJLSQWLUraPLTv7Gme32zoF9KSTfLO7v53vZ3d/M7/fIth+IO6INt2jjoA7bjHCJoAlzCRw59YwHYjBnfMPqAKWQYKjGkfCJqAF0xwZjipQtA3MxeSG87VhOOYegVrUCy7UZM9S6TLIdAamySTclZdYhFhRHloGYg7mgZv1Zzztvgud7V1tbQ2twYA34LJmF4p5dXF1KTufnE+SxeJtuCZNsLDCQU0+RyKTF27Unw101l8e6hns3u0PBalORVVVkcaEKBJDgV3+cGM4tKKmI+ohlIGnygKX00rSBfszz/n2uXv81wd6+rt1orsZCHRdr1Imk2F2Kob3hutSxW8thsd8AXNaln9D7CTfA6O+0UgkMuwVvEFFUbbAcrkcTA8+AtOk8E6KiQiDmMFSDqZItAzEVQviRkdDdaFgPp8HSZKAEAL5Qh7Sq2lIJBJwv2scUqkUnKoZgNhcDKhKg5aH+1IkcouCAdFGAQsuWZYhOjwFHQ96oagWgRoUov1T9kRBEODAwxM2QtEUl+Wp+Ln9VRo6BcMw4ErHRYjH4/B26AlQoQQTRdHWwcd9AH57+UAXddvDD37DmrBBV34WfqiXPl61g+vr6xA9zsGeM9gOdsNXkgpEtTwVvwOklXLKm6+/p5ezwk4B+j6droBs2CsGa/gNs6RIxazl4Tc25mpTgw/apPR1LYlNRFAzgsOxkyXYLIM1V8NMwyAkJSctD1eGVKiq5wWjSPdjmeTkiKvVW4f2YPHWl3GAVq6ymcyCTgovM3FzyRiDe2TaKcEKsLpJvNHjZgPNqEtyi6mZIm4SRFyLMUsONSSdkPeFtY1n0mczoY3BHTLhwPRy9/lzcziCw9ACI+yql0VLzcGAZbYSM5CCSZg1/9oc/nn7+i8N9p/8An4JMADxhH+xHfuiKwAAAABJRU5ErkJggg==);
+        }
+
+        .notifyjs-bootstrap-info {
+            color: #3A87AD;
+            background-color: #D9EDF7;
+            border-color: #BCE8F1;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QYFAhkSsdes/QAAA8dJREFUOMvVlGtMW2UYx//POaWHXg6lLaW0ypAtw1UCgbniNOLcVOLmAjHZolOYlxmTGXVZdAnRfXQm+7SoU4mXaOaiZsEpC9FkiQs6Z6bdCnNYruM6KNBw6YWewzl9z+sHImEWv+vz7XmT95f/+3/+7wP814v+efDOV3/SoX3lHAA+6ODeUFfMfjOWMADgdk+eEKz0pF7aQdMAcOKLLjrcVMVX3xdWN29/GhYP7SvnP0cWfS8caSkfHZsPE9Fgnt02JNutQ0QYHB2dDz9/pKX8QjjuO9xUxd/66HdxTeCHZ3rojQObGQBcuNjfplkD3b19Y/6MrimSaKgSMmpGU5WevmE/swa6Oy73tQHA0Rdr2Mmv/6A1n9w9suQ7097Z9lM4FlTgTDrzZTu4StXVfpiI48rVcUDM5cmEksrFnHxfpTtU/3BFQzCQF/2bYVoNbH7zmItbSoMj40JSzmMyX5qDvriA7QdrIIpA+3cdsMpu0nXI8cV0MtKXCPZev+gCEM1S2NHPvWfP/hL+7FSr3+0p5RBEyhEN5JCKYr8XnASMT0xBNyzQGQeI8fjsGD39RMPk7se2bd5ZtTyoFYXftF6y37gx7NeUtJJOTFlAHDZLDuILU3j3+H5oOrD3yWbIztugaAzgnBKJuBLpGfQrS8wO4FZgV+c1IxaLgWVU0tMLEETCos4xMzEIv9cJXQcyagIwigDGwJgOAtHAwAhisQUjy0ORGERiELgG4iakkzo4MYAxcM5hAMi1WWG1yYCJIcMUaBkVRLdGeSU2995TLWzcUAzONJ7J6FBVBYIggMzmFbvdBV44Corg8vjhzC+EJEl8U1kJtgYrhCzgc/vvTwXKSib1paRFVRVORDAJAsw5FuTaJEhWM2SHB3mOAlhkNxwuLzeJsGwqWzf5TFNdKgtY5qHp6ZFf67Y/sAVadCaVY5YACDDb3Oi4NIjLnWMw2QthCBIsVhsUTU9tvXsjeq9+X1d75/KEs4LNOfcdf/+HthMnvwxOD0wmHaXr7ZItn2wuH2SnBzbZAbPJwpPx+VQuzcm7dgRCB57a1uBzUDRL4bfnI0RE0eaXd9W89mpjqHZnUI5Hh2l2dkZZUhOqpi2qSmpOmZ64Tuu9qlz/SEXo6MEHa3wOip46F1n7633eekV8ds8Wxjn37Wl63VVa+ej5oeEZ/82ZBETJjpJ1Rbij2D3Z/1trXUvLsblCK0XfOx0SX2kMsn9dX+d+7Kf6h8o4AIykuffjT8L20LU+w4AZd5VvEPY+XpWqLV327HR7DzXuDnD8r+ovkBehJ8i+y8YAAAAASUVORK5CYII=);
+        }
+
+        .notifyjs-bootstrap-warn {
+            color: #C09853;
+            background-color: #FCF8E3;
+            border-color: #FBEED5;
+            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAMAAAC6V+0/AAABJlBMVEXr6eb/2oD/wi7/xjr/0mP/ykf/tQD/vBj/3o7/uQ//vyL/twebhgD/4pzX1K3z8e349vK6tHCilCWbiQymn0jGworr6dXQza3HxcKkn1vWvV/5uRfk4dXZ1bD18+/52YebiAmyr5S9mhCzrWq5t6ufjRH54aLs0oS+qD751XqPhAybhwXsujG3sm+Zk0PTwG6Shg+PhhObhwOPgQL4zV2nlyrf27uLfgCPhRHu7OmLgAafkyiWkD3l49ibiAfTs0C+lgCniwD4sgDJxqOilzDWowWFfAH08uebig6qpFHBvH/aw26FfQTQzsvy8OyEfz20r3jAvaKbhgG9q0nc2LbZxXanoUu/u5WSggCtp1anpJKdmFz/zlX/1nGJiYmuq5Dx7+sAAADoPUZSAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfdBgUBGhh4aah5AAAAlklEQVQY02NgoBIIE8EUcwn1FkIXM1Tj5dDUQhPU502Mi7XXQxGz5uVIjGOJUUUW81HnYEyMi2HVcUOICQZzMMYmxrEyMylJwgUt5BljWRLjmJm4pI1hYp5SQLGYxDgmLnZOVxuooClIDKgXKMbN5ggV1ACLJcaBxNgcoiGCBiZwdWxOETBDrTyEFey0jYJ4eHjMGWgEAIpRFRCUt08qAAAAAElFTkSuQmCC);
+        }
+    </style>
+    <style type="text/css" id="notify-metro">
+        .notifyjs-metro-base {
+            padding: 8px 15px 8px 14px;
+            white-space: nowrap;
+            background-repeat: no-repeat;
+            background-position: 3px 7px;
+        }
+
+        .notifyjs-metro-error {
+            color: #ff7e7e;
+            opacity: 0.95;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            background-color: #3c4858;
+            box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.43);
+        }
+
+        .notifyjs-metro-success {
+            color: #a0e546;
+            opacity: 0.95;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            background-color: #3c4858;
+            box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <style type="text/css" id="core-notify">
+        .notifyjs-corner {
+            position: fixed;
+            margin: 5px;
+            z-index: 1050;
+        }
+
+        .notifyjs-corner .notifyjs-wrapper,
+        .notifyjs-corner .notifyjs-container {
+            position: relative;
+            display: block;
+            height: inherit;
+            width: inherit;
+            margin: 3px;
+        }
+
+        .notifyjs-wrapper {
+            z-index: 1;
+            position: absolute;
+            display: inline-block;
+            height: 0;
+            width: 0;
+        }
+
+        .notifyjs-container {
+            display: none;
+            z-index: 1;
+            position: absolute;
+        }
+
+        .notifyjs-hidable {
+            cursor: pointer;
+        }
+
+        [data-notify-text],
+        [data-notify-html] {
+            position: relative;
+        }
+
+        .notifyjs-arrow {
+            position: absolute;
+            z-index: 2;
+            width: 0;
+            height: 0;
+        }
+    </style>
+    <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <style type="text/css">
+        .gpay-card-info-container {
+            padding: 0;
+            position: relative;
+            min-width: 240px;
+            height: 40px;
+            min-height: 40px;
+            border-radius: 4px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            cursor: pointer;
+            border: 0px;
+        }
+
+        .gpay-card-info-container.black,
+        .gpay-card-info-animation-container.black {
+            background-color: #000;
+            box-shadow: none;
+        }
+
+        .gpay-card-info-container.white,
+        .gpay-card-info-animation-container.white {
+            background-color: #fff;
+        }
+
+        .gpay-card-info-container.black.active {
+            background-color: #5f6368;
+        }
+
+        .gpay-card-info-container.black.hover,
+        .gpay-card-info-animation-container.black.hover {
+            background-color: #3c4043;
+        }
+
+        .gpay-card-info-container.white.active {
+            background-color: #fff;
+        }
+
+        .gpay-card-info-container.white.focus {
+            box-shadow: #e8e8e8 0 1px 1px 0, #e8e8e8 0 1px 3px;
+        }
+
+        .gpay-card-info-container.white.hover,
+        .gpay-card-info-animation-container.white.hover {
+            background-color: #f8f8f8;
+        }
+
+        .gpay-card-info-iframe {
+            border: 0;
+            display: block;
+            height: 40px;
+            margin: auto;
+            max-width: 100%;
+            width: 240px;
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-iframe {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .gpay-card-info-container-fill,
+        .gpay-card-info-container-fill>.gpay-card-info-container {
+            width: 100%;
+            height: inherit;
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-placeholder-container {
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding-top: 3px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-placeholder-svg-container {
+            position: relative;
+            width: 60%;
+            height: inherit;
+            max-height: 80%;
+            margin-right: -20%;
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-placeholder-svg-container>svg {
+            position: absolute;
+            left: 0;
+            height: 100%;
+            max-width: 100%;
+        }
+    </style>
+    <style type="text/css">
+        .gpay-card-info-animation-container {
+            display: flex;
+            width: 100%;
+            position: absolute;
+            z-index: 100;
+            height: 40px;
+            border-radius: 4px;
+        }
+
+        .gpay-card-info-placeholder-container {
+            display: flex;
+            width: 240px;
+            height: 100%;
+            margin: auto;
+        }
+
+        .gpay-card-info-animated-progress-bar-container {
+            display: flex;
+            box-sizing: border-box;
+            position: absolute;
+            width: 100%;
+        }
+
+        .gpay-card-info-animated-progress-bar {
+            border-radius: 4px 4px 0px 0px;
+            animation-duration: 0.5s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: 1;
+            animation-name: gpayProgressFill;
+            animation-timing-function: cubic-bezier(0.97, 0.33, 1, 1);
+            background: #caccce;
+            width: 100%;
+            height: 3px;
+            max-height: 3px;
+        }
+
+        .gpay-card-info-animated-progress-bar-indicator {
+            border-radius: 4px 4px 0px 0px;
+            max-width: 20px;
+            min-width: 20px;
+            height: 3px;
+            max-height: 3px;
+            background: linear-gradient(to right, #caccce 30%, #acaeaf 60%);
+            animation-delay: 0.5s;
+            animation-duration: 1.7s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-name: gpayPlaceHolderShimmer;
+        }
+
+        .gpay-card-info-iframe-fade-in {
+            animation-fill-mode: forwards;
+            animation-duration: 0.6s;
+            animation-name: gpayIframeFadeIn;
+        }
+
+        .gpay-card-info-animation-container-fade-out {
+            animation-fill-mode: forwards;
+            animation-duration: 0.6s;
+            animation-name: gpayPlaceHolderFadeOut;
+        }
+
+        .gpay-card-info-animation-gpay-logo {
+            margin: 13px 7px 0px 39px;
+            background-origin: content-box;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 17px;
+            max-height: 17px;
+            max-width: 41px;
+            min-width: 41px;
+        }
+
+        .gpay-card-info-animation-gpay-logo.black {
+            background-image: url("https://www.gstatic.com/instantbuy/svg/dark_gpay.svg");
+        }
+
+        .gpay-card-info-animation-gpay-logo.white {
+            background-image: url("https://www.gstatic.com/instantbuy/svg/light_gpay.svg");
+        }
+
+        @keyframes gpayPlaceHolderShimmer {
+            0% {
+                margin-left: 0px;
+            }
+
+            100% {
+                margin-left: calc(100% - 20px);
+            }
+        }
+
+        @keyframes gpayIframeFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes gpayPlaceHolderFadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes gpayProgressFill {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-animation-container {
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .gpay-card-info-container-fill .gpay-card-info-animation-gpay-logo {
+            background-position: right;
+            margin: 0 0 0 0;
+            max-width: none;
+            width: 25%;
+            height: inherit;
+            max-height: 50%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="liqpay_checkout"></div>
+    <div class="container">
+        <div class="row">
+            <div class="border rounded-5 mt-5 pl-4 pr-4 pb-4 col-8 pt-2">
+                <div class="control-group col-12 font-weight-bold">
+                    <h1 class="display-4 text-center ">Payment Details</h1>
+                    <hr>
+                    <form class="form-group form-contol" name="add-blog-post-form" id="add-blog-post-form" method="post" action="#">
+                        <div class="container p-0">
+                            <div class="card px-4 bg-info">
+                                <div class="container__block__info container__block__info__widget">
+                                    <div class="control-input amount">
+                                        <!-- <input type="hidden" name="order_id" id="order_id" value="">
+                                        <input type="hidden" name="version" id="version" value=""> -->
+                                        <div name="helper_color" class="fs-4 mb-1 borderd rounded-3">Enter the payment amount</div>
+                                        <input type="text" name="amount" id="amount" class="borderd rounded-3 border-secondary col-8 pt-1 pb-1" placeholder="Enter the payment amount" required>
+                                        <select class="selectric-hide-select p-1 rounded-3 col-2  pt-1 pb-1" el="Currency"  name="currency" tabindex="-1">
+                                            <option value="UAH"> UAH </option>
+                                            <option value="USD"> USD </option>
+                                            <option value="RUB"> RUB </option>
+                                            <option value="EUR"> EUR </option>
+                                            <option value="RUR"> RUR </option>
+                                        </select>
+                                        <hr class="control-input-hr-passive"">
+                                        <hr class="control-input-hr-active">
+                                    </div>
+                                    <div class="control-input currency">
+                                        <div class="selectric-wrapper selectric-media__select selectric-below">
+                                            <div class="row gx-3">
+                                                <div class="col-12 mb-3">
+                                                    <label for="description" class="form-label fs-4 mb-1"">Appointment of Payment</label>
+                                                    <textarea class="form-control" id="description" name="description" rows="3" placeholder="Input the Appointment of Payment"></textarea>
+                                                  </div>
+                                                <div class="col-12">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="text fs-4 mb-1"">Card Number</p> 
+                                                        <input class="form-control mb-3" name="cardNumber" type="text" placeholder="1234 5678 435678">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="text fs-4 mb-1"">Expiry</p> 
+                                                        <input class="form-control mb-3" name="expiry" type="text" placeholder="MM/YYYY">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="text fs-4 mb-1"">CVV/CVC</p> 
+                                                        <input class="form-control mb-3 pt-2 " name="cvv/cvc" type="password"  placeholder="***">
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-1 mb-1">
+                                                    <div class="control-group col-12 text-center ">
+                                                        <button id="btn-submit" name="submit" class="btn btn-primary fs-4 border-radius col-8 mb-3 ">
+                                                            Pay
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <script>
+                    window.LiqPayCheckoutCallback = function () {
+                        LiqPayCheckout.init({
+                            data: "eyAidmVyc2lvbiIgOiAzLCAicHVibGljX2tleSIgOiAieW91cl9wdWJsaWNfa2V5IiwgImFjdGlv" +
+                                "biIgOiAicGF5IiwgImFtb3VudCIgOiAxLCAiY3VycmVuY3kiIDogIlVTRCIsICJkZXNjcmlwdGlv" +
+                                "biIgOiAiZGVzY3JpcHRpb24gdGV4dCIsICJvcmRlcl9pZCIgOiAib3JkZXJfaWRfMSIgfQ==",
+                            signature: "QvJD5u9Fg55PCx/Hdz6lzWtYwcI=",
+                            embedTo: "#liqpay_checkout",
+                            language: "ru",
+                            mode: "embed" // embed || popup
+                        }).on("liqpay.callback", function (data) {
+                            console.log(data.status);
+                            console.log(data);
+                        }).on("liqpay.ready", function (data) {
+                            // ready
+                        }).on("liqpay.close", function (data) {
+                            // close
+                        });
+                    };
+                </script>
+                <script src="//static.liqpay.ua/libjs/checkout.js" async></script>
+                <div class="container">
+                </div>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+                    crossorigin="anonymous"></script>
+</body>
+
+</html>
