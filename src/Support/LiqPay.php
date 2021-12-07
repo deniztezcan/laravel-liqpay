@@ -1,6 +1,5 @@
 <?php
 
- 
 namespace DenizTezcan\LiqPay\Support;
 
 /**
